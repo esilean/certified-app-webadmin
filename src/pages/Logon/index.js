@@ -1,9 +1,6 @@
-
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-import { FaUserAlt, FaEnvelope } from 'react-icons/fa'
 
 import { useToasts } from 'react-toast-notifications'
 
@@ -27,7 +24,7 @@ export default props => {
             const response = await api.post('sec/login', values)
             localStorage.setItem(consts.USER_KEY, response.data.token)
 
-            //addToast('Acesso garantido...', { appearance: 'success', autoDismiss: true })
+            // addToast('Acesso garantido12...', { appearance: 'success', autoDismiss: true })
             history.push('/')
 
         } catch (err) {
@@ -42,68 +39,61 @@ export default props => {
     })
 
     return (
-        <div className="logon-container">
-            <Container>
-                <Row className="justify-content-center">
-                    <Col md="8">
-                        <CardGroup>
-                            <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '100%' }}>
-                                <CardBody className="text-center">
-                                    <div>
-                                        <img src={logoImg} alt='Logo' height='120'></img>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                            <Card className="p-4">
-                                <CardBody>
-                                    <Form onSubmit={handleSubmit(handleLogin)}>
-                                        <h2>CE - Login</h2>
-                                        <p className="text-muted"></p>
-                                        <InputGroup className="mb-3">
-                                            <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>
-                                                    <FaUserAlt />
-                                                </InputGroupText>
-                                            </InputGroupAddon>
-                                            <AuthInput
-                                                register={register({ required: true })}
-                                                //value={email}
-                                                //onChange={e => setEmail(e.target.value)}
-                                                name='email'
-                                                type="email"
-                                                err={errors.email}
-                                                placeholder="Usuário"
-                                                autoComplete="username" />
-                                        </InputGroup>
-                                        <InputGroup className="mb-4">
-                                            <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>
-                                                    <FaEnvelope />
-                                                </InputGroupText>
-                                            </InputGroupAddon>
-                                            <AuthInput
-                                                register={register({ required: true })}
-                                                //value={password}
-                                                //onChange={e => setPassword(e.target.value)}
-                                                name='password'
-                                                type="password"
-                                                err={errors.password}
-                                                placeholder="Password"
-                                                autoComplete="current-password" />
-                                        </InputGroup>
-                                        <Row>
-                                            <Col>
-                                                <Button color="primary" className="px-4">Login</Button>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                </CardBody>
-                            </Card>
+        <div className="login-page">
+            <div className="login-logo">
+                <b>Bevixy</b> CO
+            </div>
+            <div className="container">
+                <div className="justify-content-center row">
+                    <div className="col-md-8">
+                        <div className="card-group">
 
-                        </CardGroup>
-                    </Col>
-                </Row>
-            </Container>
+                            <div className="primary-color py-5 d-md-down-none card">
+                                <div className="text-center card-body">
+                                    <img src={logoImg} alt="Logo" height="150" />
+                                </div>
+                            </div>
+
+                            <div className="p-4 card">
+                                <div className="card-body login-card-body">
+                                    <p className="login-box-msg">LOGIN</p>
+
+                                    <form onSubmit={handleSubmit(handleLogin)}>
+                                        <div className="input-group mb-3">
+                                            <AuthInput
+                                                type="email"
+                                                name="email"
+                                                placeholder="Email"
+                                                register={register({ required: true })}
+                                                icon="envelope"
+                                                err={errors.email}
+                                            />
+                                        </div>
+                                        <div className="input-group mb-3">
+                                        <AuthInput
+                                                type="password"
+                                                name="password"
+                                                placeholder="Password"
+                                                register={register({ required: true })}
+                                                icon="lock"
+                                                err={errors.password}
+                                            />
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-8">
+                                                &nbsp;
+                                            </div>
+                                            <div className="col-4">
+                                                <button type="submit" className="btn primary-color secondary-text-color btn-block">Login</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

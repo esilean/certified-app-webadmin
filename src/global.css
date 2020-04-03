@@ -1,0 +1,38 @@
+/***************************************************/
+/* Cores da APP */
+/***************************************************/
+.primary-color {
+    background-color: #00264e !important;
+}
+
+.text-color {
+    color: #beff00 !important;
+}
+
+.secondary-text-color {
+    color: #ffffff !important;
+}
+
+.primary-color-dark {
+    background-color: #001326 !important;
+}
+
+/***************************************************/
+/* Controle do Menu (Nao esconde quando é celular) */
+/***************************************************/
+.brand {
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.brand-arrow {
+    width: 10%;
+    cursor: pointer;
+    visibility: visible;
+}
+
+@media screen and (min-width: 992px) {
+    .brand-arrow {
+        visibility: hidden;
+    }
+  }

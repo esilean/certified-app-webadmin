@@ -1,3 +1,5 @@
+import '../utils/templates/dependencies'
+
 import React, { useState } from 'react'
 import axios from 'axios'
 
@@ -7,6 +9,7 @@ import consts from '../consts'
 import api from '../services/api'
 
 import App from '../app/app'
+
 import Logon from '../pages/Logon'
 
 export default props => {
@@ -25,13 +28,12 @@ export default props => {
             localStorage.removeItem(consts.USER_KEY)
             addToast('Erro ao validar seu email...', { appearance: 'error', autoDismiss: true })
         })
-
     }
 
     validateToken()
+    // console.log("Validando Token..." + validToken)
 
     if (validToken) {
-
         axios.defaults.headers.common['authorization'] = token
         return (<App></App>)
     }

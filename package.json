@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "admin-lte": "3.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
+    "font-awesome": "^4.7.0",
+    "ionicons": "^5.0.1",
+    "jquery": "^3.4.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^5.2.0",
     "react-icons": "^3.9.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-toast-notifications": "^2.4.0",
-    "reactstrap": "^8.4.1"
+    "react-toast-notifications": "^2.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
