@@ -1,19 +1,17 @@
-
 import React from 'react'
 
 import ContentHeader from '../../components/template/ContentHeader';
 import Content from '../../components/template/Content';
-import Row from '../../components/layout/Row'
 
-export default function Dashboard() {
+import QuestionsList from './components/QuestionsList'
+
+export default function Questions() {
 
     return (
         <>
-            <ContentHeader title='Dashboard' subtitle='' />
+            <ContentHeader title='Demo' subtitle='' />
             <Content>
-                <Row>
-                    DASH!
-                </Row>
+                <QuestionsList />
             </Content>
         </>
     )

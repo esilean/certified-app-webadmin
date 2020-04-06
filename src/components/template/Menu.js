@@ -12,7 +12,7 @@ export default props => {
                 <MenuItem path='/' label='Dashboard' icon='tachometer' badge='info' badgetext='New' />
 
                 <MenuTree label='Cadastros' icon='clipboard'>
-                    <MenuItem path='/questions' label='Questões' icon='question-circle' badge='warning' badgetext='New' />
+                    <MenuItem path='/questions' label='Demo' icon='question-circle' badge='warning' badgetext='New' />
                 </MenuTree>
 
                 {/* <MenuTree label='Configurações' icon='cog'>

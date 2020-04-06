@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 export default props => {
 
     return (
         <li className="nav-item has-treeview">
-            <a href="/#/" className="nav-link">
+            <Link to={''} className="nav-link">
                 <i className={`nav-icon fa fa-${props.icon}`}></i>
                 <p>
                     {props.label} <i className="right fa fa-angle-left"></i>
                 </p>
-            </a>
-            <ul className="nav nav-treeview">
+            </Link>
+            <ul className="nav nav-treeview" style={{ display: 'none' }}>
                 {props.children}
             </ul>
         </li>

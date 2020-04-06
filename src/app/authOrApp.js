@@ -34,7 +34,7 @@ export default props => {
     // console.log("Validando Token..." + validToken)
 
     if (validToken) {
-        axios.defaults.headers.common['authorization'] = token
+        axios.defaults.headers.common['Authorization'] = token
         return (<App></App>)
     }
     else {

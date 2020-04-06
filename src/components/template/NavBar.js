@@ -1,9 +1,13 @@
 import React from 'react';
+import { useHistory  } from 'react-router-dom'
 
 export default props => {
 
+    const history = useHistory()
+
     function signOut() {
         localStorage.removeItem('_ceclient')
+        history.push('/')
     }
 
     return (

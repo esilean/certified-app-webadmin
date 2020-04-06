@@ -897,7 +897,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.4.0", "@babel/runtime@^7.5.5":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.4.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.9.2":
   version "7.9.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
   integrity sha512-NE2DtOdufG7R5vnfQUTehdTfNycfUANEtCa9PssN9O/xmTzP4E08UI797ixaei6hBEVL9BI/PsdJS5x7mWoB9Q==
@@ -1296,6 +1296,11 @@
   integrity sha512-FwbuYN9KXBkloLeIR3xRgI8dyOdfK/KzaJlChszNuwmUXD1lHXfLlSeo4n4KrKt2udIK9K9/TzlnyCA3ubM2fA==
   dependencies:
     infer-owner "^1.0.4"
+
+"@scarf/scarf@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-0.1.5.tgz#fc4cc88294eca336eed9a91549180346de5e6946"
+  integrity sha512-Fx6atDc7JM1r0WkPCDhNetVZNp+DO21q/HGlomAKBG+k8vb1B8fg8Yige4oCf1P9OWTZWm5tM5i3jlXhrSbNOg==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -7714,6 +7719,14 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+match-sorter@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/match-sorter/-/match-sorter-4.1.0.tgz#8ba63f4aaf438d7a844829f1a75aa3ab1b2587ba"
+  integrity sha512-DCzT9JVO2FWVOTfsKqIqVhu/skFa3bK0lQom70j6Co9yKX9bPn2gRtn9BFD9ykkM8F/USjTQeId+nlFfTVvz+w==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    remove-accents "0.4.2"
+
 md5.js@^1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.5.tgz#b5d07b8e3216e3e27cd728d72f70d1e6a342005f"
@@ -10154,6 +10167,13 @@ react-scripts@3.4.1:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-table@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.0.4.tgz#456838661982c83c3682f156c59a41b4339a2120"
+  integrity sha512-Uqpj+VnUIvsNWNtNFD1z2i7OCHdlhoJtQt0DWx3XOkZnvDyI/eCghK8YBfA9mY4TW7vEgCDLaRCcREC/fmcx6Q==
+  dependencies:
+    "@scarf/scarf" "^0.1.5"
+
 react-toast-notifications@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-toast-notifications/-/react-toast-notifications-2.4.0.tgz#6213730bd1fe158fc01aeef200687ea94c5c5b24"
@@ -10388,6 +10408,11 @@ relateurl@^0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
+
+remove-accents@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/remove-accents/-/remove-accents-0.4.2.tgz#0a43d3aaae1e80db919e07ae254b285d9e1c7bb5"
+  integrity sha1-CkPTqq4egNuRngeuJUsoXZ4ce7U=
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
