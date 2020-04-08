@@ -1,26 +1,17 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-
-import { ToastProvider, DefaultToastContainer } from 'react-toast-notifications'
+import { toast } from 'react-toastify'
 
 import AuthOrApp from './authOrApp'
 
-const ToastContainer = props => (
-    <DefaultToastContainer
-        className='toast-container'
-        style={{ zIndex: 9000 }}
-        {...props}
-    />
-)
-
-
+toast.configure({
+    autoClose: 3500,
+})
 export default props => (
-    <ToastProvider components={{ ToastContainer }} autoDismissTimeout={4000}>
-        <BrowserRouter>
-            <Switch>
-                <Route path='/' component={AuthOrApp} />
-                <Redirect from='*' to='/' />
-            </Switch>
-        </BrowserRouter>
-    </ToastProvider>
+    <BrowserRouter>
+        <Switch>
+            <Route path='/' component={AuthOrApp} />
+            <Redirect from='*' to='/' />
+        </Switch>
+    </BrowserRouter>
 )

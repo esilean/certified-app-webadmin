@@ -1,19 +1,135 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import toast from '../../../components/toastr'
+import filesize from 'filesize'
 import { useForm } from 'react-hook-form'
 
-export default function QuestionEditModal({ question = {}, show, editing, closeEditModal, handleData }) {
+import axios from 'axios'
+import api from '../../../services/api'
+import { addOrUpdate } from '../actions/index'
 
-    async function handleSubmitForm(values) {
-        const response = await handleData(values)
-        //console.log(response)
+import Upload from '../../../components/upload/Upload'
+import FileList from '../../../components/upload/FileList'
 
-        if (response)
+export default function QuestionEditModal({ dispatch, question = {}, show, editing, closeEditModal }) {
+
+    const [uploadedFile, setUploadedFile] = useState({})
+    const [newId, setNewId] = useState(0)
+
+    useEffect(() => {
+
+        const data = {
+            id: question.id,
+            name: question.image_name,
+            readableSize: filesize((question.image_size > 0) ? question.image_size : 0),
+            preview: question.image_url,
+            progress: 0,
+            uploaded: true,
+            error: false,
+            url: question.image_url,
+            new: false
+        }
+
+        setUploadedFile(data)
+        setNewId(0)
+    }, [question, show])
+
+    async function handleAddOrUpdate(values) {
+
+        //obter id inserido dps do primeiro clique
+        if (newId !== 0)
+            values.id = `${newId}`
+
+        console.log(values)
+
+        const id = await addOrUpdate(dispatch, values)
+        //gravar id do registro inserido para nao duplicar caso de erro
+        setNewId(id)
+
+        if (id > 0 && uploadedFile.new) {
+            processUpload(id, uploadedFile)
+        }
+        else if (id > 0 && (!uploadedFile.new || !!uploadedFile.new)) {
             closeModal()
+            toast.success("Pergunta atualizada com sucesso!", { autoClose: 1500, pauseOnFocusLoss: false })
+        }
+
+
+    }
+
+    function processUpload(id, file) {
+
+        const data = new FormData()
+        data.append('file', file.file, file.name)
+
+        api.post(`questions/img/${id}`, data,
+            {
+                headers: {
+                    'Authorization': axios.defaults.headers.common['Authorization']
+                },
+                onUploadProgress: e => {
+                    const progress = parseInt(Math.round((e.loaded * 100) / e.total))
+                    setUploadedFile({ ...uploadedFile, progress })
+                }
+            }).then(response => {
+                setUploadedFile({ ...uploadedFile, id: response.data.id, uploaded: true, url: response.data.image_url })
+
+                setTimeout(() => {
+                    closeModal()
+                    toast.success("Pergunta atualizada com sucesso!", { autoClose: 1500, pauseOnFocusLoss: false })
+                }, 500)
+
+            }).catch(err => {
+                setUploadedFile({ ...uploadedFile, error: true })
+                toast.error("Erro ao atualizar imagem. Verifique o tamanho...", { autoClose: 3000, pauseOnFocusLoss: false })
+            })
+    }
+
+    async function handleImageDelete(id) {
+
+        await api.delete(`questions/img/${id}`,
+            {
+                headers: {
+                    'Authorization': axios.defaults.headers.common['Authorization']
+                },
+            })
+
+        setUploadedFile({})
     }
 
     function closeModal() {
+
+        URL.revokeObjectURL(uploadedFile.preview)
+
         reset()
         closeEditModal()
+        setUploadedFile({})
+    }
+
+    function handleDrop(files) {
+        if (files.length === 0)
+            return
+        else if (files.length > 1)
+            return
+
+        return
+    }
+
+    function handleUpload(files) {
+        //console.log(file)
+        const data = {
+            file: files[0],
+            id: files[0].name,
+            name: files[0].name,
+            readableSize: filesize(files[0].size),
+            preview: URL.createObjectURL(files[0]),
+            progress: 0,
+            uploaded: false,
+            error: false,
+            url: null,
+            new: true
+        }
+
+        setUploadedFile(data)
     }
 
     //form validation control
@@ -34,7 +150,7 @@ export default function QuestionEditModal({ question = {}, show, editing, closeE
                             </button>
                         </div>
                         {/* FORM INIT */}
-                        <form onSubmit={handleSubmit(handleSubmitForm)} >
+                        <form onSubmit={handleSubmit(handleAddOrUpdate)} >
                             {/* Hidden Fields */}
                             <input
                                 type="hidden"
@@ -70,6 +186,11 @@ export default function QuestionEditModal({ question = {}, show, editing, closeE
                                             {errors.description && <span className="invalid-feedback">Este campo é obrigatório</span>}
                                         </div>
                                         <div className="form-group">
+                                            {!!uploadedFile.name && (<label>Imagem</label>)}
+                                            {editing && (<Upload onDrop={handleDrop} onUpload={handleUpload} />)}
+                                            {!!uploadedFile.name && (<FileList file={uploadedFile} onDelete={handleImageDelete} editing={editing} />)}
+                                        </div>
+                                        <div className="form-group">
                                             <label>Pontos</label>
                                             <input
                                                 name='value'
@@ -99,8 +220,8 @@ export default function QuestionEditModal({ question = {}, show, editing, closeE
                                 </div>
                             </div>
                             <div className="modal-footer justify-content-between">
-                                <button type="button" className="btn btn-default" style={{visibility: (!editing) ? 'hidden' : 'visible'}} onClick={() => closeModal()}>Cancelar</button>
-                                <button type="submit" className="btn primary-color text-color" style={{visibility: (!editing) ? 'hidden' : 'visible'}}>Salvar</button>
+                                <button type="button" className="btn btn-default" style={{ visibility: (!editing) ? 'hidden' : 'visible' }} onClick={() => closeModal()}>Fechar</button>
+                                <button type="submit" className="btn primary-color text-color" style={{ visibility: (!editing) ? 'hidden' : 'visible' }}>Salvar</button>
                             </div>
                         </form>
                     </div>

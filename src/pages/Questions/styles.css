@@ -1,0 +1,24 @@
+.question-img-preview {
+    margin-right: 10px;
+}
+
+.question-img-preview img {
+    max-width: 100px;
+    height: 65px;
+    border-radius: 5px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    transition: height 0.4s;
+}
+
+
+@media screen and (max-width: 600px) {
+    th:nth-child(2) {
+        display: none
+    }
+    
+    td:nth-child(2) {
+        display: none
+    }
+}

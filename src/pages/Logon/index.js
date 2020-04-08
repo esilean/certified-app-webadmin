@@ -1,8 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-
-import { useToasts } from 'react-toast-notifications'
+import toast from '../../components/toastr'
 
 import AuthInput from './components/inputAuth'
 
@@ -14,22 +13,19 @@ import api from '../../services/api'
 
 export default props => {
     const history = useHistory();
-    const { addToast } = useToasts()
 
     async function handleLogin(values) {
 
         try {
 
-            //localStorage.removeItem(consts.USER_KEY)
             const response = await api.post('sec/login', values)
             localStorage.setItem(consts.USER_KEY, response.data.token)
 
-            // addToast('Acesso garantido12...', { appearance: 'success', autoDismiss: true })
+            toast.info("Bem vindo!", { autoClose: 2000 })
             history.push('/')
 
         } catch (err) {
-            addToast('Usuário e/ou senha incorretos.', { appearance: 'error', autoDismiss: true })
-            //console.log(err)
+            toast.error('Usuário e/ou senha incorretos.')
         }
     }
 

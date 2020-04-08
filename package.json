@@ -7,18 +7,22 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
+    "filesize": "^6.1.0",
     "font-awesome": "^4.7.0",
+    "glamor": "^2.20.40",
     "ionicons": "^5.0.1",
     "jquery": "^3.4.1",
     "match-sorter": "^4.1.0",
     "react": "^16.13.1",
+    "react-circular-progressbar": "^2.0.3",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^10.2.2",
     "react-hook-form": "^5.2.0",
     "react-icons": "^3.9.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-table": "^7.0.4",
-    "react-toast-notifications": "^2.4.0"
+    "react-toastify": "^5.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -68,6 +68,7 @@ export default function QuestionsTable(props) {
             getTableProps,
             getTableBodyProps,
             headerGroups,
+            footerGroups,
             prepareRow,
             page,
 
@@ -86,7 +87,7 @@ export default function QuestionsTable(props) {
             setGlobalFilter,
         } = useTable(
             {
-                columns, data, initialState: { pageIndex: 0, pageSize: 15 }, filterTypes,
+                columns, data, initialState: { pageIndex: 0, pageSize: 10 }, filterTypes,
             },
             useGlobalFilter, useSortBy, usePagination)
 
@@ -94,7 +95,7 @@ export default function QuestionsTable(props) {
         return (
             <div className='card'>
                 <div className='card-body p-0'>
-                    <table {...getTableProps()} className='table projects'>
+                    <table {...getTableProps()} className='table table-hover projects'>
                         <thead>
                             {
                                 headerGroups.map(headerGroup => (
@@ -151,9 +152,20 @@ export default function QuestionsTable(props) {
                                 })
                             }
                         </tbody>
+                        <tfoot>
+                            {footerGroups.map(group => (
+                                <tr {...group.getFooterGroupProps()}>
+                                    {group.headers.map(column => (
+                                        <td {...column.getFooterProps()} style={{ borderTop: '2px solid #dee2e6', borderBottom: '2px solid #dee2e6', paddingLeft: 20, fontWeight: 'bold' }} >{column.render('Footer')}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tfoot>
+
+
                     </table>
                     {/* Pagination UI */}
-                    <div className="" style={{ marginRight: '23px' }}>
+                    <div className="" style={{ marginRight: 23, marginTop: 15 }}>
                         <ul className="pagination justify-content-end">
                             <li className="paginate_button page-item previous">
                                 <button className="page-link primary-color text-color" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -182,7 +194,7 @@ export default function QuestionsTable(props) {
                                         setPageSize(Number(e.target.value))
                                     }}
                                 >
-                                    {[15, 30, 45, 60, 100].map(pageSize => (
+                                    {[10, 20, 30, 50, 100].map(pageSize => (
                                         <option key={pageSize} value={pageSize}>
                                             {pageSize}
                                         </option>

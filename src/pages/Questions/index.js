@@ -5,11 +5,13 @@ import Content from '../../components/template/Content';
 
 import QuestionsList from './components/QuestionsList'
 
+import './styles.css'
+
 export default function Questions() {
 
     return (
         <>
-            <ContentHeader title='Demo' subtitle='' />
+            <ContentHeader title='Perguntas' subtitle='' />
             <Content>
                 <QuestionsList />
             </Content>

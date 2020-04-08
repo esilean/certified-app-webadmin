@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 
-import axios from 'axios'
-import api from '../../../services/api'
-
-import { useToasts } from 'react-toast-notifications'
+import { reducer, INITIAL_STATE } from '../reducer'
+import { load, destroy } from '../actions'
 
 import QuestionsTable from './QuestionsTable'
 import QuestionDeleteModal from './QuestionDeleteModal'
@@ -11,27 +9,17 @@ import QuestionEditModal from './QuestionEditModal'
 
 export default function QuestionsList() {
 
-    const { addToast } = useToasts()
-
-    const [questions, setQuestions] = useState([])
     const [question, setQuestion] = useState({})
 
     const [showDelete, setShowDelete] = useState('')
     const [showEdit, setShowEdit] = useState('')
     const [editing, setEditing] = useState(false)
 
-
-    async function loadQuestions() {
-
-        const response = await api.get('questions', { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
-        //console.log(response.data)
-
-        setQuestions(response.data)
-    }
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
     useEffect(() => {
-        loadQuestions()
-    }, [])
+        load(dispatch)
+    }, [state.loading])
 
     const columns = React.useMemo(
         () => [
@@ -45,10 +33,37 @@ export default function QuestionsList() {
                                 {row.original.title}
                             </span>
                             <br />
-                            <small>
+                            <small style={{ color: '#00264e' }}>
                                 {row.original.description}
                             </small>
                         </>
+                    )
+                },
+                Footer: info => {
+                    // Only calculate total visits if rows change
+                    const total = React.useMemo(
+                        () =>
+                            info.rows.reduce((sum, row) => 1 + sum, 0),
+                        [info.rows]
+                    )
+
+                    return <>Total: {total} pergunta(s)</>
+                },
+            },
+            {
+                Header: 'Imagem',
+                id: 'image_url',
+                Cell: ({ row }) => {
+                    return (
+                        <div className="question-img-preview">
+                            <a
+                                href={row.original.image_url}
+                                target='_blank'
+                                rel="noopener noreferrer"
+                            >
+                                <img src={row.original.image_url} alt={row.original.image_name}></img>
+                            </a>
+                        </div>
                     )
                 }
             },
@@ -57,11 +72,11 @@ export default function QuestionsList() {
                 accessor: 'value',
             },
             {
-                accessor: d => d.active === true ? 0 : 1,
+                accessor: d => d.active === true ? '%ativo' : '%inativo',
                 Header: 'Ativo',
                 Cell: ({ row }) => {
                     return (
-                        <span className={`badge badge-${(row.original.active) ? 'success' : 'danger'}`}>{(row.original.active) ? 'Ativo' : 'Inativo'}</span>
+                        <span className={`badge badge-${(row.original.active) ? 'success' : 'danger'}`}>{(row.original.active) ? 'Sim' : 'Não'}</span>
                     )
                 }
             },
@@ -110,68 +125,16 @@ export default function QuestionsList() {
         setShowDelete('')
     }
     async function handleDelete(question) {
-        try {
 
-            const { title, description, image_url, value } = question
-
-            await api.put(`questions/${question.id}`,
-                {
-                    title, description, image_url, value, active: 0
-                },
-                {
-                    headers: { 'Authorization': axios.defaults.headers.common['Authorization'] }
-                })
-
-            //remover e adicionar novo
-            let filteredQuestion = questions.filter(q => q.id !== question.id)
-            setQuestions(questions => [{ id: question.id, title, description, image_url, value, active: 0 }, ...filteredQuestion])
-
-            setShowDelete('')
-
-            addToast('A Pergunta foi inativada.', { appearance: 'success', autoDismiss: true })
-
-        } catch (error) {
-            addToast('Erro ao atualizar pergunta.', { appearance: 'error', autoDismiss: true })
-        }
+        destroy(dispatch, question)
+        setShowDelete('')
     }
-
-    async function handleData(values) {
-
-        const id = values.id && values.id !== '0' ? values.id : ''
-        const method = values.id && values.id !== '0' ? 'put' : 'post'
-        values.active = (values.active) ? 1 : 0
-
-        try {
-
-            const response = await api[method](`questions/${id}`, values, { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
-            if (response.data && response.data.id > 0) {
-
-                if (id === '0') { //add
-                    setQuestions(questions => [response.data, ...questions])
-                }
-                else {
-                    //remover e adicionar novo
-                    const filteredQuestion = questions.filter(q => q.id !== response.data.id)
-                    setQuestions(questions => [response.data, ...filteredQuestion])
-                }
-
-                addToast(`Pergunta ${(id > 0) ? 'atualizada' : 'incluída'} com sucesso.`, { appearance: 'success', autoDismiss: true })
-                return true
-            }
-
-            addToast(`Erro ao ${(id > 0) ? 'atualizar' : 'incluir'} pergunta.`, { appearance: 'error', autoDismiss: true })
-        } catch (error) {
-            addToast(`Erro ao ${(id > 0) ? 'atualizar' : 'incluir'} pergunta.`, { appearance: 'error', autoDismiss: true })
-        }
-        return false
-    }
-
 
     return (
         <>
-            <QuestionsTable columns={columns} questions={questions} showEditModal={showEditModal} />
+            <QuestionsTable columns={columns} questions={state.questions} showEditModal={showEditModal} />
             <QuestionDeleteModal handleDelete={handleDelete} question={question} show={showDelete} closeDeleteModal={closeDeleteModal} />
-            <QuestionEditModal question={question} show={showEdit} editing={editing} closeEditModal={closeEditModal} handleData={handleData} />
+            <QuestionEditModal question={question} show={showEdit} editing={editing} closeEditModal={closeEditModal} dispatch={dispatch} />
         </>
     )
 }
