@@ -4,9 +4,7 @@ export default props => {
 
     return (
         <div className="content" >
-            <div className="container-fluid">
-                {props.children}
-            </div>
+            {props.children}
         </div >
 
     )

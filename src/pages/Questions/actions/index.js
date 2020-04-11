@@ -3,6 +3,25 @@ import toast from '../../../components/toastr'
 import axios from 'axios'
 import api from '../../../services/api'
 
+import { showTabs, selectedTab } from '../../../components/tab/tabActions'
+
+
+export function init(dispatchTabs, dispatch) {
+
+    //é preciso limpar a questao selecionada antes de liberar o form
+    if (dispatch) {
+        dispatch({ type: 'QUESTION_SELECTED', payload: { id: 0 } })
+    }
+
+    showTabs(dispatchTabs, 'tabList', 'tabAdd')
+    selectedTab(dispatchTabs, 'tabList')
+}
+
+export function selectUpdateTab(dispatchTabs, dispatch, question) {
+    showTabs(dispatchTabs, 'tabUpdate')
+    selectedTab(dispatchTabs, 'tabUpdate')
+    dispatch({ type: 'QUESTION_SELECTED', payload: question })
+}
 
 export function load(dispatch) {
 
@@ -10,66 +29,63 @@ export function load(dispatch) {
     ).then(response => {
         dispatch({ type: 'QUESTIONS_LOADED', payload: response.data })
     }).catch(err => {
-        toast.error("Erro ao carregar as perguntas.", { autoClose: 3000, pauseOnFocusLoss: false })
+        toast.error("Erro ao carregar as perguntas.")
     })
 }
 
-export async function addOrUpdate(dispatch, values) {
-    const method = values.id && values.id !== '0' ? 'put' : 'post'
-    values.active = (values.active) ? 1 : 0
+export async function addOrUpdate(dispatch, data) {
+    const method = data.id && data.id !== '0' ? 'put' : 'post'
+    data.active = (data.active) ? 1 : 0
 
     dispatch({ type: 'QUESTIONS_LOADING', payload: true })
 
     let id = 0
-
     if (method === 'post')
-        id = create(dispatch, values)
+        id = create(dispatch, data)
     else
-        id = update(dispatch, values)
+        id = update(dispatch, data)
 
     return id
 }
 
 
-async function create(dispatch, values) {
+async function create(dispatch, data) {
 
     try {
-        const response = await api.post(`questions/`, values, { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
+        const response = await api.post(`questions/`, data, { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
         return response.data.id
     } catch (err) {
-        toast.error("Erro ao inserir esta pergunta.", { autoClose: 3000, pauseOnFocusLoss: false })
+        toast.error("Erro ao inserir esta pergunta.")
     }
 
 }
 
-async function update(dispatch, values) {
+async function update(dispatch, data) {
 
-    const { id } = values
-
+    const { id } = data
     try {
-        const response = await api.put(`questions/${id}`, values, { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
+        const response = await api.put(`questions/${id}`, data, { headers: { 'Authorization': axios.defaults.headers.common['Authorization'] } })
         return response.data.id
     } catch (err) {
-        toast.error("Erro ao atualizar esta pergunta.", { autoClose: 3000, pauseOnFocusLoss: false })
+        toast.error("Erro ao atualizar esta pergunta.")
     }
 
 }
 
 export function destroy(dispatch, question) {
 
-    const { id, title, description, image_url, value } = question
+    const { id } = question
 
     api.put(`questions/${id}`,
         {
-            title, description, image_url, value, active: 0
+            ...question, active: 0
         },
         {
             headers: { 'Authorization': axios.defaults.headers.common['Authorization'] }
         }).then(response => {
-            const questionUpdated = { id: question.id, title, description, image_url, value, active: 0 }
-            dispatch({ type: 'QUESTION_DELETED', payload: questionUpdated })
-            toast.success("A Pergunta foi inativada.", { autoClose: 2000, pauseOnFocusLoss: false })
+            dispatch({ type: 'QUESTION_DELETED', payload: id })
+            toast.success("A Pergunta foi inativada.")
         }).catch(err => {
-            toast.error("Erro ao inativar a pergunta.", { autoClose: 3000, pauseOnFocusLoss: false })
+            toast.error("Erro ao inativar a pergunta.")
         })
 }

@@ -39,8 +39,6 @@ export default function QuestionEditModal({ dispatch, question = {}, show, editi
         if (newId !== 0)
             values.id = `${newId}`
 
-        console.log(values)
-
         const id = await addOrUpdate(dispatch, values)
         //gravar id do registro inserido para nao duplicar caso de erro
         setNewId(id)
@@ -115,7 +113,7 @@ export default function QuestionEditModal({ dispatch, question = {}, show, editi
     }
 
     function handleUpload(files) {
-        //console.log(file)
+
         const data = {
             file: files[0],
             id: files[0].name,

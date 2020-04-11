@@ -1,12 +1,13 @@
 import '../utils/templates/dependencies'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
 import consts from '../consts'
 import api from '../services/api'
 
+import If from '../utils/if'
 import App from '../app/app'
 import Logon from '../pages/Logon'
 
@@ -16,27 +17,35 @@ export default props => {
 
     const token = localStorage.getItem(consts.USER_KEY)
 
-    function validateToken() {
-        api.post('sec/vtoken', { token }
-        ).then(response => {
-            setValidToken(response.data.valid)
-        }).catch(err => {
-            setValidToken(false)
-            localStorage.removeItem(consts.USER_KEY)
-            toast.error("Erro ao validar seu email...", { autoClose: 5000 })
+    useEffect(() => {
 
-        })
-    }
+        function validateToken() {
+            api.post('sec/vtoken', { token }
+            ).then(response => {
+                setValidToken(response.data.valid)
+                axios.defaults.headers.common['Authorization'] = token
+            }).catch(err => {
+                setValidToken(false)
+                localStorage.removeItem(consts.USER_KEY)
+                toast.error("Erro ao validar seu email...", { autoClose: 5000 })
 
-    validateToken()
-    // console.log("Validando Token..." + validToken)
+            })
+        }
 
-    if (validToken) {
-        axios.defaults.headers.common['Authorization'] = token
-        return (<App></App>)
-    }
-    else {
-        return (<Logon />)
-    }
+        validateToken()
+
+    }, [token])
+
+    return (
+        <>
+            <If test={validToken}>
+                <App />
+            </If>
+            <If test={!validToken}>
+                <Logon />
+            </If>
+        </>
+    )
+
 
 }

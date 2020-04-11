@@ -1,32 +1,25 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 
-import { store as tabStore } from '../../../components/tab/store'
-import { selectedTab } from '../../../components/tab/tabActions'
-
-import { store as questionStore } from '../store'
-import { load, destroy, selectUpdateTab, addOrUpdate } from '../actions'
+import { reducer, INITIAL_STATE } from '../reducer'
+import { load, destroy } from '../actions'
 
 import QuestionsTable from './QuestionsTable'
-import QuestionYesNoModal from './QuestionYesNoModal'
+import QuestionDeleteModal from './QuestionDeleteModal'
+import QuestionEditModal from './QuestionEditModal'
 
-
-export default function QuestionsList({ onUpdateSelected }) {
-
-    //reducer das tabs
-    const dispatchTabs = useContext(tabStore).dispatch
-
-    //reducer das tabs
-    const questionState = useContext(questionStore)
-    const { state, dispatch } = questionState
+export default function QuestionsList() {
 
     const [question, setQuestion] = useState({})
+
     const [showDelete, setShowDelete] = useState('')
-    const [showCopy, setShowCopy] = useState('')
+    const [showEdit, setShowEdit] = useState('')
+    const [editing, setEditing] = useState(false)
+
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
     useEffect(() => {
-
         load(dispatch)
-    }, [state.loading, dispatch])
+    }, [state.loading])
 
     const columns = React.useMemo(
         () => [
@@ -93,17 +86,17 @@ export default function QuestionsList({ onUpdateSelected }) {
                 Cell: ({ row }) => {
                     return (
                         <div className="project-actions text-right">
-                            <button className={`btn btn-warning btn-sm ${(row.original.canUpdate === 0) ? 'disabled' : ''}`} title={`${(row.original.canUpdate === 0) ? 'Pergunta não pode ser alterada' : 'Alterar pergunta'}`} onClick={() => selectUpdateTab(dispatchTabs, dispatch, row.original)} href="/#/" type='button'>
+                            <button className="btn btn-info btn-sm" title='Visualizar Pergunta' onClick={() => showEditModal(row.original, false)} href="/#/" type='button'>
+                                <i className="fa fa-eye">
+                                </i>
+                            </button>
+                            {' '}
+                            <button className="btn btn-warning btn-sm" title='Alterar Pergunta' onClick={() => showEditModal(row.original, true)} href="/#/" type='button'>
                                 <i className="fa fa-pencil">
                                 </i>
                             </button>
                             {' '}
-                            <button className="btn btn-info btn-sm" title='Copiar Pergunta' onClick={() => showModal('copy', row.original)} href="/#/" type='button'>
-                                <i className="fa fa-copy">
-                                </i>
-                            </button>
-                            {' '}
-                            <button className="btn btn-danger btn-sm" title='Inativar Pergunta' onClick={() => showModal('delete', row.original)} href="/#/" type='button'>
+                            <button className="btn btn-danger btn-sm" title='Inativar Pergunta' onClick={() => showDeleteModal(row.original)} href="/#/" type='button'>
                                 <i className="fa fa-trash-o">
                                 </i>
                             </button>
@@ -112,37 +105,24 @@ export default function QuestionsList({ onUpdateSelected }) {
                 }
             },
         ],
-        [dispatchTabs, dispatch]
+        []
     )
 
-    function selectAddTab(question) {
-        selectedTab(dispatchTabs, 'tabAdd')
-    }
-
-    function showModal(modal, question) {
+    function showEditModal(question, editing) {
+        setEditing(editing)
         setQuestion(question)
+        setShowEdit('show')
 
-        if (modal === 'delete')
-            setShowDelete('show')
-        else if (modal === 'copy')
-            setShowCopy('show')
     }
-    function closeModal(modal) {
-        if (modal === 'delete')
-            setShowDelete('')
-        else if (modal === 'copy')
-            setShowCopy('')
+    function closeEditModal() {
+        setShowEdit('')
     }
-    async function handleCopy(question) {
-        //zerar id
-        question.id = 0
-        //zerar id das respostas
-        const answers = question.answers.map(ans => {
-            return { ...ans, id: 0 }
-        })
-        question.answers = answers
-        await addOrUpdate(dispatch, question)
-        setShowCopy('')
+    function showDeleteModal(question) {
+        setQuestion(question)
+        setShowDelete('show')
+    }
+    function closeDeleteModal() {
+        setShowDelete('')
     }
     async function handleDelete(question) {
 
@@ -152,9 +132,9 @@ export default function QuestionsList({ onUpdateSelected }) {
 
     return (
         <>
-            <QuestionsTable columns={columns} questions={state.questions} selectAddTab={selectAddTab} />
-            <QuestionYesNoModal modal='delete' handleYesClick={handleDelete} question={question} show={showDelete} closeModal={closeModal} labelSubmit='Inativar' />
-            <QuestionYesNoModal modal='copy' handleYesClick={handleCopy} question={question} show={showCopy} closeModal={closeModal} labelSubmit='Copiar' />
+            <QuestionsTable columns={columns} questions={state.questions} showEditModal={showEditModal} />
+            <QuestionDeleteModal handleDelete={handleDelete} question={question} show={showDelete} closeDeleteModal={closeDeleteModal} />
+            <QuestionEditModal question={question} show={showEdit} editing={editing} closeEditModal={closeEditModal} dispatch={dispatch} />
         </>
     )
 }

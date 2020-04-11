@@ -15,8 +15,7 @@ export default function QuestionsTable(props) {
         globalFilter,
         setGlobalFilter,
     }) {
-
-        //const count = preGlobalFilteredRows.length
+        const count = preGlobalFilteredRows.length
 
         return (
             <span>
@@ -26,12 +25,10 @@ export default function QuestionsTable(props) {
                     onChange={e => {
                         setGlobalFilter(e.target.value) // Set undefined to remove the filter entirely
                     }}
-                    placeholder={`Procure aqui as perguntas...`}
+                    placeholder={` ${count} perguntas...`}
                     style={{
-                        paddingLeft: '2px',
-                        fontSize: '0.9rem',
+                        fontSize: '1.1rem',
                         border: '0',
-                        width: '50%'
                     }}
                 />
             </span>
@@ -45,7 +42,7 @@ export default function QuestionsTable(props) {
     // Let the table remove the filter if the string is empty
     fuzzyTextFilterFn.autoRemove = val => !val
 
-    function Table({ columns, data, selectAddTab }) {
+    function Table({ columns, data, showEditModal }) {
 
         const filterTypes = React.useMemo(
             () => ({
@@ -121,7 +118,7 @@ export default function QuestionsTable(props) {
 
                             <tr>
                                 <th
-                                    colSpan={columns.length - 2}
+                                    colSpan={columns.length - 1}
                                     style={{
                                         textAlign: 'left',
                                     }}
@@ -132,10 +129,9 @@ export default function QuestionsTable(props) {
                                         setGlobalFilter={setGlobalFilter}
                                     />
                                 </th>
-                                <th>{' '}</th>
                                 <th>
                                     <div className="project-actions text-right">
-                                        <button className="btn primary-color text-color btn-sm" title='Incluir Nova Pergunta' onClick={() => selectAddTab()} href="/#/" type='button'>
+                                        <button className="btn primary-color text-color btn-sm" title='Incluir Nova Pergunta' onClick={() => showEditModal({ id: 0, title: '', description: '', value: 1, active: true }, true)} href="/#/" type='button'>
                                             <i className='fa fa-file'></i>
                                         </button>
                                     </div>
@@ -224,6 +220,6 @@ export default function QuestionsTable(props) {
 
     return (
 
-        <Table columns={props.columns} data={props.questions} selectAddTab={props.selectAddTab} />
+        <Table columns={props.columns} data={props.questions} showEditModal={props.showEditModal} />
     )
 }
