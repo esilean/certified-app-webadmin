@@ -17,7 +17,7 @@ export default props => {
                     {props.label} <i className="right fa fa-angle-left"></i>
                 </p>
             </Link>
-            <ul className="nav nav-treeview" style={{ display: 'none' }}>
+            <ul className="nav nav-treeview" style={{}}>
                 {props.children}
             </ul>
         </li>

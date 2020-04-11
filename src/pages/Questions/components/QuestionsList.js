@@ -91,9 +91,12 @@ export default function QuestionsList({ onUpdateSelected }) {
                 Header: '',
                 id: 'action',
                 Cell: ({ row }) => {
+
+
+
                     return (
                         <div className="project-actions text-right">
-                            <button className={`btn btn-warning btn-sm ${(row.original.canUpdate === 0) ? 'disabled' : ''}`} title={`${(row.original.canUpdate === 0) ? 'Pergunta não pode ser alterada' : 'Alterar pergunta'}`} onClick={() => selectUpdateTab(dispatchTabs, dispatch, row.original)} href="/#/" type='button'>
+                            <button disabled={(row.original.canUpdate === 0) ? true : false} className={`btn btn-warning btn-sm ${(row.original.canUpdate === 0) ? 'disabled' : ''}`} title={`${(row.original.canUpdate === 0) ? 'Pergunta não pode ser alterada' : 'Alterar pergunta'}`} onClick={() => selectUpdateTab(dispatchTabs, dispatch, row.original)} href="/#/" type='button'>
                                 <i className="fa fa-pencil">
                                 </i>
                             </button>
