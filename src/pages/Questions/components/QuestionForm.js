@@ -28,6 +28,22 @@ export default function QuestionForm({ init, submitLabel }) {
     const [answer, setAnswer] = useState('')
     const [answers, setAnswers] = useState([])
 
+    //form validation control
+    const { register, setValue, handleSubmit, errors, reset, clearError } = useForm({
+        mode: 'onBlur',
+    })
+
+    useEffect(() => {
+        // inicializar form
+        reset({
+            title: state.question.title,
+            description: state.question.description,
+            value: state.question.value,
+            active: state.question.active ?? true,
+            erranswer: state.question.id || ''
+        })
+    }, [state.question, reset])
+
     useEffect(() => {
         const data = {
             id: state.question.id,
@@ -41,9 +57,12 @@ export default function QuestionForm({ init, submitLabel }) {
             new: false
         }
         setUploadedFile(data)
-        setNewId(0)
+
+        setNewId(state.question.id || 0)
         setAnswers(state.question.answers || [])
     }, [state.question])
+
+
 
     async function handleAddOrUpdate(data) {
 
@@ -62,10 +81,10 @@ export default function QuestionForm({ init, submitLabel }) {
             processUpload(id, uploadedFile)
         }
         else if (id > 0 && (!uploadedFile.new || !!uploadedFile.new)) {
-            initializeForm()
+            resetForm()
             toast.success("Pergunta atualizada com sucesso!")
         } else {
-            initializeForm()
+            resetForm()
             toast.error("Erro desconhecido. Entre em contato!")
         }
 
@@ -87,7 +106,7 @@ export default function QuestionForm({ init, submitLabel }) {
                 }
             }).then(response => {
                 setUploadedFile({ ...uploadedFile, id: response.data.id, uploaded: true, url: response.data.image_url })
-                initializeForm()
+                resetForm()
                 toast.success("Pergunta atualizada com sucesso!")
 
             }).catch(err => {
@@ -134,12 +153,7 @@ export default function QuestionForm({ init, submitLabel }) {
         setUploadedFile(data)
     }
 
-    //form validation control
-    const { register, setValue, handleSubmit, errors, reset, clearError } = useForm({
-        mode: 'onBlur',
-    })
-
-    function initializeForm() {
+    function resetForm() {
 
         URL.revokeObjectURL(uploadedFile.preview)
         reset()
@@ -200,17 +214,10 @@ export default function QuestionForm({ init, submitLabel }) {
                 <div className='col-12'>
                     <div className='card'>
                         <div className="card-body">
-                            <input
-                                type="hidden"
-                                id="id"
-                                defaultValue={state.question.id || 0}
-                                ref={register({ required: true })}
-                                name="id" />
                             <div className="form-group">
                                 <label>Pergunta</label>
                                 <textarea
                                     name='title'
-                                    defaultValue={state.question.title}
                                     ref={register({ required: true })}
                                     className={`form-control form-control-sm ${(errors.title && 'is-invalid')}`}
                                     rows={2}
@@ -221,7 +228,6 @@ export default function QuestionForm({ init, submitLabel }) {
                                 <label>Descritivo Auxiliar</label>
                                 <textarea
                                     name='description'
-                                    defaultValue={state.question.description}
                                     ref={register({ required: false })}
                                     className={`form-control form-control-sm ${(errors.description && 'is-invalid')}`}
                                     rows={2}
@@ -237,7 +243,6 @@ export default function QuestionForm({ init, submitLabel }) {
                                 <label>Pontos</label>
                                 <input
                                     name='value'
-                                    defaultValue={state.question.value}
                                     ref={register({ required: true, min: 1 })}
                                     type='number'
                                     className={`form-control form-control-sm ${(errors.value && 'is-invalid')}`}
@@ -249,7 +254,6 @@ export default function QuestionForm({ init, submitLabel }) {
                                 <div className="custom-control custom-switch">
                                     <input
                                         name='active'
-                                        defaultChecked={state.question.active ?? true}
                                         ref={register({ required: false })}
                                         type="checkbox"
                                         className="custom-control-input"
@@ -310,12 +314,11 @@ export default function QuestionForm({ init, submitLabel }) {
                                 style={{ visibility: "hidden", fontSize: 1 }}
                                 id="erranswer"
                                 ref={register({ required: true })}
-                                defaultValue={state.question.id || ''}
                                 name="erranswer" />
                         </div>
 
                         <div className="card-footer">
-                            <button type="button" className="btn btn-default" onClick={() => initializeForm()}>Voltar</button>{' '}
+                            <button type="button" className="btn btn-default" onClick={() => resetForm()}>Voltar</button>{' '}
                             <button type="submit" className="btn primary-color text-color">{submitLabel}</button>
                         </div>
                     </div>

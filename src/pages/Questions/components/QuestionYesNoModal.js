@@ -26,4 +26,5 @@ export default function QuestionYesNoModal({ modal, question = {}, show, closeMo
             {show && <div className="modal-backdrop fade show"></div>}
         </>
     )
+
 }
