@@ -1,12 +1,10 @@
 import './global.css'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import Routes from './app/routes';
+import Routes from './app/routes'
 
 ReactDOM.render(
   <Routes />, document.getElementById('root')
-);
-
-
+)
