@@ -37,7 +37,7 @@ export default props => {
     return (
         <div className="login-page">
             <div className="login-logo">
-                <b>Bevixy</b> CO
+                ADM <b>Certificado de Alunos</b>
             </div>
             <div className="container">
                 <div className="justify-content-center row">
@@ -66,7 +66,7 @@ export default props => {
                                             />
                                         </div>
                                         <div className="input-group mb-3">
-                                        <AuthInput
+                                            <AuthInput
                                                 type="password"
                                                 name="password"
                                                 placeholder="Password"

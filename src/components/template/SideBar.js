@@ -2,19 +2,21 @@ import React from 'react';
 
 import Menu from './Menu'
 
-import logoImg from '../../assets/brand/logo-side-bar.png'
-import profilePic from '../../assets/brand/profilepic.jpg'
+import logoImg from '../../assets/brand/logo-side-bar.jpg'
+// import profilePic from '../../assets/user/profile.png'
+
+// import { getUserName } from '../../utils/cookies'
 
 export default props => {
 
     return (
-        <aside className="main-sidebar sidebar-dark-primary elevation-4">
+        <aside className="main-sidebar sidebar-dark-primary primary-color elevation-3">
             {/* <!-- Brand Logo --> */}
             <div className="brand-link brand">
                 <div className="brand-logo">
                     <img src={logoImg} alt="Bevixy CO Logo" className="brand-image img-circle elevation-3" style={{ opacity: '0.8' }} />
-                    <span className="brand-text font-weight-light">
-                        Bevixy CO
+                    <span className="brand-text text-color">
+                        O Corpo Explica ®
                     </span>
                 </div>
                 <div className="brand-arrow" data-widget="pushmenu">
@@ -34,14 +36,14 @@ export default props => {
                     <div className="os-viewport os-viewport-native-scrollbars-invisible" style={{}}>
                         <div className="os-content" style={{ padding: '0px 8px', height: '100%', width: '100%' }}>
                             {/* <!-- Sidebar user panel (optional) --> */}
-                            <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                            {/* <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                                 <div className="image">
                                     <img src={profilePic} alt='Foto Perfil' className='img-circle elevation-2'></img>
                                 </div>
-                                <div className="info">
-                                    <a href="/#/" className="d-block">Leandro Bevilaqua</a>
+                                <div className="info text-color">
+                                    {getUserName()}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <Menu />
                         </div>

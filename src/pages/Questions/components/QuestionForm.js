@@ -210,120 +210,115 @@ export default function QuestionForm({ init, submitLabel }) {
 
     return (
         <form onSubmit={handleSubmit(handleAddOrUpdate)} noValidate >
-            <div className="row">
-                <div className='col-12'>
-                    <div className='card'>
-                        <div className="card-body">
-                            <div className="form-group">
-                                <label>Pergunta</label>
-                                <textarea
-                                    name='title'
-                                    ref={register({ required: true })}
-                                    className={`form-control form-control-sm ${(errors.title && 'is-invalid')}`}
-                                    rows={2}
-                                    placeholder="Informe a pergunta" />
-                                {errors.title && <span className="invalid-feedback">Este campo é obrigatório.</span>}
-                            </div>
-                            <div className="form-group">
-                                <label>Descritivo Auxiliar</label>
-                                <textarea
-                                    name='description'
-                                    ref={register({ required: false })}
-                                    className={`form-control form-control-sm ${(errors.description && 'is-invalid')}`}
-                                    rows={2}
-                                    placeholder="Informe algum descritivo auxiliar" />
-                                {errors.description && <span className="invalid-feedback">Este campo é obrigatório.</span>}
-                            </div>
-                            <div className="form-group">
-                                {(<label>Imagem</label>)}
-                                {(<Upload onDrop={handleDrop} onUpload={handleUpload} />)}
-                                {!!uploadedFile.name && (<FileList file={uploadedFile} onDelete={handleImageDelete} editing={true} />)}
-                            </div>
-                            <div className="form-group">
-                                <label>Pontos</label>
-                                <input
-                                    name='value'
-                                    ref={register({ required: true, min: 1 })}
-                                    type='number'
-                                    className={`form-control form-control-sm ${(errors.value && 'is-invalid')}`}
-                                    placeholder="Informe o valor da pergunta" />
-                                {errors.value && <span className="invalid-feedback">Este campo é obrigatório.</span>}
-                            </div>
-                            <div className="form-group">
-                                <label>Ativo</label>
-                                <div className="custom-control custom-switch">
-                                    <input
-                                        name='active'
-                                        ref={register({ required: false })}
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        id="activeQuestion" />
-                                    <label className="custom-control-label" htmlFor="activeQuestion"></label>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label>Adicionar resposta</label>
-                                <div className="input-group mb-3">
-                                    <div className="input-group-prepend">
-                                        <button
-                                            type="button"
-                                            onClick={() => addAnswer()}
-                                            className="btn btn-success"><i className='fa fa-plus'></i>
-                                        </button>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder='Para inserir clique no + ou "ctrl + enter"'
-                                        value={answer}
-                                        onKeyDown={(e) => handleKeyEnter(e)}
-                                        onChange={(e) => setAnswer(e.target.value)} />
-                                </div>
-                            </div>
-
-                            {answers.map((ans, index) => {
-                                return (
-                                    <div key={index} className="form-group">
-                                        <div className="input-group">
-                                            <div className="input-group-prepend" >
-                                                <span className="input-group-text" style={(ans.valid) ? { backgroundColor: '#d4ebd0' } : {}}>
-                                                    <input
-                                                        type="radio"
-                                                        name={`${ans.name}`}
-                                                        className='answers-radio'
-                                                        id={`${ans.name}`}
-                                                        onChange={(e) => selectAnswer(e.target.id)}
-                                                        checked={ans.valid} />
-                                                </span>
-                                            </div>
-                                            <input type="text" className="form-control" style={(ans.valid) ? { background: '#d4ebd0' } : {}} value={ans.name} readOnly={true} />
-                                            <div className="input-group-append">
-                                                <button type="button" onClick={() => editAnswer(ans.name)} className={`btn btn-warning`}><i className='fa fa-pencil'></i></button>
-                                            </div>
-                                            <div className="input-group-append">
-                                                <button type="button" onClick={() => removeAnswer(ans.name)} className={`btn btn-danger`}><i className='fa fa-trash-o'></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                            {errors.erranswer && <span className="invalid-feedback" style={{ display: 'block' }}>Este campo é obrigatório. Escolha uma resposta correta.</span>}
-                            <input
-                                type="text"
-                                style={{ visibility: "hidden", fontSize: 1 }}
-                                id="erranswer"
-                                ref={register({ required: true })}
-                                name="erranswer" />
-                        </div>
-
-                        <div className="card-footer">
-                            <button type="button" className="btn btn-default" onClick={() => resetForm()}>Voltar</button>{' '}
-                            <button type="submit" className="btn primary-color text-color">{submitLabel}</button>
-                        </div>
+            <div className="form-row">
+                <div className="form-group col-12">
+                    <label>Pergunta</label>
+                    <textarea
+                        name='title'
+                        ref={register({ required: true })}
+                        className={`form-control form-control-sm ${(errors.title && 'is-invalid')}`}
+                        rows={2}
+                        placeholder="Informe a pergunta" />
+                    {errors.title && <span className="invalid-feedback">Este campo é obrigatório.</span>}
+                </div>
+                <div className="form-group col-12">
+                    <label>Descritivo Auxiliar</label>
+                    <textarea
+                        name='description'
+                        ref={register({ required: false })}
+                        className={`form-control form-control-sm ${(errors.description && 'is-invalid')}`}
+                        rows={2}
+                        placeholder="Informe algum descritivo auxiliar" />
+                    {errors.description && <span className="invalid-feedback">Este campo é obrigatório.</span>}
+                </div>
+                <div className="form-group col-12">
+                    {(<label>Imagem</label>)}
+                    {(<Upload onDrop={handleDrop} onUpload={handleUpload} />)}
+                    {!!uploadedFile.name && (<FileList file={uploadedFile} onDelete={handleImageDelete} editing={true} />)}
+                </div>
+                <div className="form-group col-12">
+                    <label>Pontos</label>
+                    <input
+                        name='value'
+                        ref={register({ required: true, min: 1 })}
+                        type='number'
+                        className={`form-control form-control-sm ${(errors.value && 'is-invalid')}`}
+                        placeholder="Informe o valor da pergunta" />
+                    {errors.value && <span className="invalid-feedback">Este campo é obrigatório.</span>}
+                </div>
+                <div className="form-group col-12">
+                    <label>Ativo</label>
+                    <div className="custom-control custom-switch">
+                        <input
+                            name='active'
+                            ref={register({ required: false })}
+                            type="checkbox"
+                            className="custom-control-input"
+                            id="activeQuestion" />
+                        <label className="custom-control-label" htmlFor="activeQuestion"></label>
                     </div>
                 </div>
+
+                <div className="form-group col-12">
+                    <label>Adicionar resposta</label>
+                    <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                            <button
+                                type="button"
+                                onClick={() => addAnswer()}
+                                className="btn btn-success"><i className='fa fa-plus'></i>
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder='Para inserir clique no + ou "ctrl + enter"'
+                            value={answer}
+                            onKeyDown={(e) => handleKeyEnter(e)}
+                            onChange={(e) => setAnswer(e.target.value)} />
+                    </div>
+                </div>
+
+                {answers.map((ans, index) => {
+                    return (
+                        <div key={index} className="form-group  col-12">
+                            <div className="input-group">
+                                <div className="input-group-prepend" >
+                                    <span className="input-group-text" style={(ans.valid) ? { backgroundColor: '#d4ebd0' } : {}}>
+                                        <input
+                                            type="radio"
+                                            name={`${ans.name}`}
+                                            className='answers-radio'
+                                            id={`${ans.name}`}
+                                            onChange={(e) => selectAnswer(e.target.id)}
+                                            checked={ans.valid} />
+                                    </span>
+                                </div>
+                                <input type="text" className="form-control" style={(ans.valid) ? { background: '#d4ebd0' } : {}} value={ans.name} readOnly={true} />
+                                <div className="input-group-append">
+                                    <button type="button" onClick={() => editAnswer(ans.name)} className={`btn btn-warning`}><i className='fa fa-pencil'></i></button>
+                                </div>
+                                <div className="input-group-append">
+                                    <button type="button" onClick={() => removeAnswer(ans.name)} className={`btn btn-danger`}><i className='fa fa-trash-o'></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+                {errors.erranswer && <span className="invalid-feedback" style={{ display: 'block' }}>Este campo é obrigatório. Escolha uma resposta correta.</span>}
+                <input
+                    type="text"
+                    style={{ visibility: "hidden", fontSize: 1 }}
+                    id="erranswer"
+                    ref={register({ required: true })}
+                    name="erranswer" />
             </div>
+
+            <div className="card-footer">
+                <button type="button" className="btn btn-default" onClick={() => resetForm()}>Voltar</button>{' '}
+                <button type="submit" className="btn primary-color text-color">{submitLabel}</button>
+            </div>
+
         </form>
     )
 }

@@ -97,7 +97,7 @@ export default function QuestionsTable(props) {
 
         return (
             <div className='card'>
-                <div className='card-body p-0'>
+                <div className='card-body table-responsive p-0'>
                     <table {...getTableProps()} className='table table-hover projects'>
                         <thead>
                             {

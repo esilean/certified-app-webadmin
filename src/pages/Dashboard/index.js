@@ -12,7 +12,7 @@ export default function Dashboard() {
       <ContentHeader title='Dashboard' subtitle='' />
       <Content>
         <Row>
-          Dashboard
+          {' '}
         </Row>
       </Content>
     </>

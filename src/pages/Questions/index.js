@@ -30,7 +30,7 @@ export default function Questions() {
                         <TabProvider>
                             <Tabs init={init}>
                                 <QuestionProvider>
-                                    <TabsHeader init={init}>
+                                    <TabsHeader init={init} page='questions'>
                                         <TabHeader label='Lista' icon='bars' target='tabList' />
                                         <TabHeader label='Incluir' icon='plus' target='tabAdd' />
                                         <TabHeader label='Alterar' icon='pencil' target='tabUpdate' />

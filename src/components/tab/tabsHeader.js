@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { store as tabStore } from './store'
-import { store as questionStore} from '../../pages/Questions/store'
+import { store as questionStore } from '../../pages/Questions/store'
 
 import If from '../../utils/if'
 
-export default ({ init, children }) => {
+export default ({ init, children, page }) => {
 
     //tabs
     const globalState = useContext(tabStore)
@@ -13,7 +13,9 @@ export default ({ init, children }) => {
     //question
     const dispatch = useContext(questionStore).dispatch
 
-    const visible = globalState.state.selected !== 'tabList'
+    const visible =
+        (page === 'questions')
+        && globalState.state.selected !== 'tabList'
 
     return (
         <div className="card-header p-0 pt-1">
