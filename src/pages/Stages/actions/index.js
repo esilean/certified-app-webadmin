@@ -1,10 +1,4 @@
-// import toast from '../../../components/toastr'
-
-// import axios from 'axios'
-// import api from '../../../services/api'
-
 import { showTabs, selectedTab } from '../../../components/tab/tabActions'
-
 
 export function init(dispatch) {
 

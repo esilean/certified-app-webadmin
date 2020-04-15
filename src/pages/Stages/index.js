@@ -2,8 +2,8 @@ import React, { } from 'react'
 
 import { StateProvider as TabProvider } from '../../components/tab/store'
 
-import ContentHeader from '../../components/template/ContentHeader';
-import Content from '../../components/template/Content';
+import ContentHeader from '../../components/template/ContentHeader'
+import Content from '../../components/template/Content'
 import Row from '../../components/layout/Row'
 import Tabs from '../../components/tab/tabs'
 import TabsHeader from '../../components/tab/tabsHeader'
